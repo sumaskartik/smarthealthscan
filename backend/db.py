@@ -1,10 +1,14 @@
 from pymongo import MongoClient
+import os
+import dotenv
 
-# Use local MongoDB
-MONGO_URI = "mongodb://localhost:27017"
+# Load .env
+dotenv.load_dotenv()
+
+# Connect to MongoDB
 
 # Or use Atlas:
-MONGO_URI = "mongodb+srv://akshay:Akshay1234@cluster0.wwuryc3.mongodb.net/HealthScan"
+MONGO_URI = os.getenv("MONGO_URI")
 
 client = MongoClient(MONGO_URI)
 
