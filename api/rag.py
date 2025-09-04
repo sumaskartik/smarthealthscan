@@ -141,14 +141,12 @@ def process_document_and_extract(file_path: str):
 
         # Step 1: Detect doc type
         doc_type = detect_doc_type(context)
-        if doc_type not in MASTER_UI_SCHEMAS:
-            return {"error": f"Unsupported or unknown doc type detected: {doc_type}"}
 
         # schema_fields = MASTER_UI_SCHEMAS[doc_type]
         schema_fields = get_health_documents(doc_type)[0]['fields']
         # Step 2: Extract data
         extracted_data = extract_with_llm(docs, doc_type, schema_fields)
-
+        print(f"Extracted Data: {extracted_data}")
         # Step 3: Map into schema
         extracted, missing = [], []
 
