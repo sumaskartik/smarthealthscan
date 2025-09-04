@@ -7,6 +7,12 @@ from db import master_collection
 app = FastAPI()
 
 
+@app.get("/")
+async def root():
+    return {"message": "Welcome to Smart Health Scan API. Use /add_document to upload documents or /test to test the API."}
+
+
+
 @app.post("/add_document")
 async def add_document(file: UploadFile = File(...)):
     # preserve file extension (pdf, docx, png, etc.)

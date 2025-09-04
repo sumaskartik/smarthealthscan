@@ -146,7 +146,6 @@ def process_document_and_extract(file_path: str):
         schema_fields = get_health_documents(doc_type)[0]['fields']
         # Step 2: Extract data
         extracted_data = extract_with_llm(docs, doc_type, schema_fields)
-        print(f"Extracted Data: {extracted_data}")
         # Step 3: Map into schema
         extracted, missing = [], []
 

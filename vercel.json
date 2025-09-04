@@ -8,7 +8,9 @@
         "maxLambdaSize": "15mb",
         "includeFiles": [
           "**/*.py",
-          "requirement.txt"
+          "requirements.txt",
+          "rag.py",
+          "db.py"
         ]
       }
     }
