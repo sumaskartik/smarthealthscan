@@ -1,3 +1,4 @@
+import os
 from pymongo import MongoClient
 import os
 import dotenv
@@ -10,10 +11,13 @@ dotenv.load_dotenv()
 # Or use Atlas:
 MONGO_URI = os.getenv("MONGO_URI")
 
+# Connect to MongoDB
 client = MongoClient(MONGO_URI)
 
 # Pick your database
 db = client["HealthScan"]
 
-# Example collections
+# Example collection
 master_collection = db["masterSchema"]
+
+print("Connected to MongoDB successfully!")
