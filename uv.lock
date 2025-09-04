@@ -469,6 +469,12 @@ wheels = [
 ]
 
 [[package]]
+name = "e"
+version = "1.4.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/79/19/8bdbb33a50c0a76eac690ecad9add56e1de1b08c657ac0faa862b7662be6/e-1.4.5.tar.gz", hash = "sha256:1ce64149fd260237e8f53d5b4863466875594e77341ec47d340c0d2c6d3b5942", size = 1800, upload-time = "2013-03-27T04:15:36.597Z" }
+
+[[package]]
 name = "emoji"
 version = "2.14.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2880,6 +2886,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "deskew" },
+    { name = "e" },
     { name = "faiss-cpu" },
     { name = "fastapi" },
     { name = "langchain" },
@@ -2917,6 +2924,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "deskew", specifier = ">=1.5.3" },
+    { name = "e", specifier = ">=1.4.5" },
     { name = "faiss-cpu", specifier = ">=1.7.4" },
     { name = "fastapi", specifier = ">=0.116.1" },
     { name = "langchain", specifier = ">=0.3.27" },
