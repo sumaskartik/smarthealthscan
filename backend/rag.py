@@ -11,6 +11,7 @@ from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader
 from langchain.schema import Document
 from langchain_openai import ChatOpenAI
 from masteruijson import MASTER_UI_SCHEMAS
+from db import master_collection
 
 # --------------------------
 # Load .env
@@ -118,7 +119,14 @@ Document text:
 
     return data
 
-
+def get_health_documents(doc_type: str):
+    docs = list(
+            master_collection.find(
+                {"doc_type": doc_type},  # query filter
+                {"_id": 0, "fields": 1},  # projection
+            )
+        )
+    return docs
 # -------------------------------------------------------------------
 # Unified pipeline
 # -------------------------------------------------------------------
@@ -137,8 +145,8 @@ def process_document_and_extract(file_path: str):
         if doc_type not in MASTER_UI_SCHEMAS:
             return {"error": f"Unsupported or unknown doc type detected: {doc_type}"}
 
-        schema_fields = MASTER_UI_SCHEMAS[doc_type]
-
+        # schema_fields = MASTER_UI_SCHEMAS[doc_type]
+        schema_fields = get_health_documents(doc_type)[0]['fields']
         # Step 2: Extract data
         extracted_data = extract_with_llm(docs, doc_type, schema_fields)
 

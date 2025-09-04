@@ -2252,6 +2252,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pymango"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/33/c0/9f4d142e60119f15ffdba1f8a900745dad904e598ba3802c1cc92c80ee75/pymango-0.1.1.tar.gz", hash = "sha256:4c32e907d42c1a4e6481ee56473015f700cfed9eee650ee7d2f319216ac1c0ca", size = 2653, upload-time = "2015-07-20T15:02:53.384Z" }
+
+[[package]]
 name = "pymupdf"
 version = "1.26.4"
 source = { registry = "https://pypi.org/simple" }
@@ -2902,6 +2911,7 @@ dependencies = [
     { name = "pdfminer-six" },
     { name = "pillow" },
     { name = "pinecone" },
+    { name = "pymango" },
     { name = "pymupdf" },
     { name = "pypdf" },
     { name = "pytesseract" },
@@ -2940,6 +2950,7 @@ requires-dist = [
     { name = "pdfminer-six", specifier = ">=20221105" },
     { name = "pillow", specifier = ">=10.0.0" },
     { name = "pinecone", specifier = ">=7.3.0" },
+    { name = "pymango", specifier = ">=0.1.1" },
     { name = "pymupdf", specifier = ">=1.22.5" },
     { name = "pypdf", specifier = ">=6.0.0" },
     { name = "pytesseract", specifier = ">=0.3.10" },

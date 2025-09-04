@@ -8,7 +8,7 @@ app = FastAPI()
 
 
 @app.post("/add_document")
-async def add_document(file: UploadFile = File(...), doc_type: str = Form(...)):
+async def add_document(file: UploadFile = File(...)):
     # preserve file extension (pdf, docx, png, etc.)
     ext = os.path.splitext(file.filename)[1] or ".bin"
     with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as tmp:
@@ -16,7 +16,7 @@ async def add_document(file: UploadFile = File(...), doc_type: str = Form(...)):
         tmp_path = tmp.name
 
     # Add document to vector store
-    result = process_document_and_extract(tmp_path, doc_type)
+    result = process_document_and_extract(tmp_path)
     return {"message": result}
 
 
