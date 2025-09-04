@@ -23,6 +23,7 @@ dependencies = [
     "pillow>=10.0.0",
     "pinecone>=7.3.0",
     "pymango>=0.1.1",
+    "pymongo>=4.14.1",
     "pymupdf>=1.22.5",
     "pypdf>=6.0.0",
     "pytesseract>=0.3.10",

@@ -10,7 +10,6 @@ from deskew import determine_skew
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader
 from langchain.schema import Document
 from langchain_openai import ChatOpenAI
-from masteruijson import MASTER_UI_SCHEMAS
 from db import master_collection
 
 # --------------------------
