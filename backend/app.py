@@ -25,7 +25,7 @@ async def chat():
     # Fetch documents with doc_type="health" and exclude _id
     docs = list(
         master_collection.find(
-            {"doc_type": "health"},  # query filter
+            {"doc_type": "bill"},  # query filter
             {"_id": 0, "fields": 1},  # projection
         )
     )
