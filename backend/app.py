@@ -1,16 +1,14 @@
 # main.py
 import shutil, tempfile, os
 from fastapi import FastAPI, File, Form, UploadFile
-from rag import  process_document_and_extract
+from rag import process_document_and_extract
+from db import master_collection
 
 app = FastAPI()
 
-@app.get("/test")
-async def test():
-    return {"server": "running"}
 
 @app.post("/add_document")
-async def add_document(file: UploadFile = File(...)):
+async def add_document(file: UploadFile = File(...), doc_type: str = Form(...)):
     # preserve file extension (pdf, docx, png, etc.)
     ext = os.path.splitext(file.filename)[1] or ".bin"
     with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as tmp:
@@ -18,10 +16,18 @@ async def add_document(file: UploadFile = File(...)):
         tmp_path = tmp.name
 
     # Add document to vector store
-    result = process_document_and_extract(tmp_path)
+    result = process_document_and_extract(tmp_path, doc_type)
     return {"message": result}
 
-# @app.post("/chat")
-# async def chat(query: str = Form(...)):
-#     result = run_rag(query)
-#     return {"analysis": result}
+
+@app.get("/test")
+async def chat():
+    # Fetch documents with doc_type="health" and exclude _id
+    docs = list(
+        master_collection.find(
+            {"doc_type": "health"},  # query filter
+            {"_id": 0, "fields": 1},  # projection
+        )
+    )
+
+    return docs
