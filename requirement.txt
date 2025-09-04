@@ -16,7 +16,7 @@ langchain_pinecone
 langchain-huggingface
 sentence-transformers>=2.2.2
 deskew
-pymango
+pymongo
 # FAISS for vector store
 faiss-cpu>=1.7.4
 
