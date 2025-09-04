@@ -1,10 +1,22 @@
 {
-    "version": 2,
-    "functions": {
-      "api/index.py": {}
-    },
-    "routes": [
-      { "src": "/(.*)", "dest": "api/index.py" }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "includeFiles": [
+          "**/*.py",
+          "requirement.txt"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.py"
+    }
+  ]
+}
