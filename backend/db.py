@@ -1,15 +1,23 @@
+import os
 from pymongo import MongoClient
+from dotenv import load_dotenv
 
-# Use local MongoDB
-MONGO_URI = "mongodb://localhost:27017"
+# Load environment variables from .env file
+load_dotenv()
 
-# Or use Atlas:
-MONGO_URI = "mongodb+srv://akshay:Akshay1234@cluster0.wwuryc3.mongodb.net/HealthScan"
+# Get the MongoDB URI from environment
+MONGO_URI = os.getenv("MONGO_URI")
 
+if not MONGO_URI:
+    raise ValueError("MONGO_URI not set in environment")
+
+# Connect to MongoDB
 client = MongoClient(MONGO_URI)
 
 # Pick your database
 db = client["HealthScan"]
 
-# Example collections
+# Example collection
 master_collection = db["masterSchema"]
+
+print("Connected to MongoDB successfully!")
