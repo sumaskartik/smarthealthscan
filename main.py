@@ -1,16 +1,17 @@
 # main.py
 import shutil, tempfile, os
-from fastapi import FastAPI, File, Form, UploadFile
+from fastapi import FastAPI, File, UploadFile
 from rag import process_document_and_extract
 from db import master_collection
 
-app = FastAPI()
+app = FastAPI(debug=True)
 
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to Smart Health Scan API. Use /add_document to upload documents or /test to test the API."}
-
+    return {
+        "message": "Welcome to Smart Health Scan API. Use /add_document to upload documents or /test to test the API."
+    }
 
 
 @app.post("/add_document")
@@ -27,11 +28,11 @@ async def add_document(file: UploadFile = File(...)):
 
 
 @app.get("/test")
-async def chat():
+async def chat(doc_type: str = "lab_report"):
     # Fetch documents with doc_type="health" and exclude _id
     docs = list(
         master_collection.find(
-            {"doc_type": "bill"},  # query filter
+            {"doc_type": doc_type},  # query filter
             {"_id": 0, "fields": 1},  # projection
         )
     )
