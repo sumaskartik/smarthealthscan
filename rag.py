@@ -194,7 +194,8 @@ Your task is to extract the values for the following fields: {field_names}.
 Return the result as a single, strictly valid JSON object.
 The keys of the JSON must be the field names.
 If a value is not found, set it to null.
-
+for invoice details, lab report deatils feild value must be in array of object, which contains only item_name and item_details which will be array of object with keys in snake_case containing all the details.
+Use data from context to fill in the values. Do not fabricate any data.
 Document text:
 ---
 {context}
@@ -260,6 +261,7 @@ def process_document_and_extract(file_path: str) -> Dict[str, Any]:
             return {"error": "⚠️ Document is empty or contains no readable text."}
 
         # 2. Detect document type
+        print("context", context)
         doc_type = detect_doc_type(context)
         logging.info(f"Detected document type: {doc_type}")
 
@@ -272,7 +274,7 @@ def process_document_and_extract(file_path: str) -> Dict[str, Any]:
 
         # 4. Extract data using LLM
         extracted_data = extract_with_llm(context, doc_type, schema_fields)
-
+        print(extracted_data)
         # 5. Map extracted data into the final schema structure
         extracted, missing = [], []
         for field in schema_fields:
