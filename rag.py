@@ -56,6 +56,7 @@ except Exception as e:
 def preprocess_image(image_path: str) -> Optional[Image.Image]:
     """
     Loads, deskews, and applies preprocessing to an image for better OCR results.
+    Skips images that are too small for OCR.
     """
     try:
         img = cv2.imread(image_path)
@@ -65,7 +66,7 @@ def preprocess_image(image_path: str) -> Optional[Image.Image]:
 
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        # Deskew the image
+        # Deskew
         angle = determine_skew(gray)
         if angle is not None:
             (h, w) = gray.shape
@@ -75,11 +76,19 @@ def preprocess_image(image_path: str) -> Optional[Image.Image]:
                 gray, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE
             )
 
-        # Apply thresholding for cleaner text
+        # Threshold
         thresh = cv2.adaptiveThreshold(
             gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2
         )
+
+        # 🔴 Prevent Tesseract crash on tiny images
+        h, w = thresh.shape
+        if w < 20 or h < 20:
+            logging.warning(f"Skipping tiny image ({w}x{h}) at {image_path}")
+            return None
+
         return Image.fromarray(thresh)
+
     except Exception as e:
         logging.error(f"Error during image preprocessing for {image_path}: {e}")
         return None
@@ -172,6 +181,7 @@ def extract_with_llm(
 ) -> Dict[str, Any]:
     """
     Extracts structured data from the document context based on a given schema.
+    Always ensures all schema fields are present in the output.
     """
     if not LLM_CLIENT:
         raise ConnectionError("LLM Client is not initialized.")
@@ -181,8 +191,9 @@ def extract_with_llm(
     prompt = f"""
 You are an expert data extraction AI. You are given a document of type '{doc_type}'.
 Your task is to extract the values for the following fields: {field_names}.
-Return the result as a single, strictly valid JSON object. The keys of the JSON must be the field names, and the values should be the data you extracted.
-If a value is not found for a field, omit it from the JSON.
+Return the result as a single, strictly valid JSON object.
+The keys of the JSON must be the field names.
+If a value is not found, set it to null.
 
 Document text:
 ---
@@ -195,14 +206,21 @@ JSON Output:
     raw_content = response.content.strip()
 
     try:
-        # LLMs often wrap JSON in markdown backticks
         json_match = re.search(r"\{.*\}", raw_content, re.DOTALL)
         if json_match:
-            return json.loads(json_match.group())
-        return {}  # Return empty dict if no JSON is found
+            parsed = json.loads(json_match.group())
+        else:
+            parsed = {}
+
+        # Ensure all schema fields are present, missing ones get None
+        for field in field_names:
+            parsed.setdefault(field, None)
+
+        return parsed
+
     except json.JSONDecodeError:
         logging.error(f"Failed to decode JSON from LLM response: {raw_content}")
-        return {}  # Return empty on failure to prevent crash
+        return {f: None for f in field_names}
 
 
 def get_document_schema(doc_type: str) -> Optional[List[Dict]]:
