@@ -14,7 +14,7 @@ async def root():
     }
 
 
-@app.post("/add_document")
+@app.post("/extract-and-validate")
 async def add_document(file: UploadFile = File(...)):
     # preserve file extension (pdf, docx, png, etc.)
     ext = os.path.splitext(file.filename)[1] or ".bin"
