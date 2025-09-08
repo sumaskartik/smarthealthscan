@@ -269,7 +269,7 @@ def process_document_and_extract(file_path: str) -> Dict[str, Any]:
                 field_copy["value"] = []
                 missing.append(field_copy)
 
-        return {"extracted": extracted, "missing": missing, "doc_type": doc_type}
+        return {"extracted": extracted, "missing": missing}
 
     except ValueError as ve:
         logging.error(f"Validation Error: {ve}")
