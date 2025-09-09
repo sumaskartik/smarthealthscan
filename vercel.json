@@ -5,12 +5,12 @@
       "src": "api/index.py",
       "use": "@vercel/python",
       "config": {
-        "maxLambdaSize": "15mb",
         "includeFiles": [
-          "**/*.py",
-          "requirements.txt",
+          "api/*.py",
           "rag.py",
-          "db.py"
+          "db.py",
+          "main.py",
+          "requirements.txt"
         ]
       }
     }
