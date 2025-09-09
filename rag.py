@@ -32,7 +32,7 @@ You are an expert data extraction AI.
 Extract values for these fields: {field_names}.
 Return only valid JSON.
 If value not found, set it to null.
-For invoice/lab report items, return array of objects.
+for invoice details, lab report details feild value must be in array of object, which contains only item_name and item_details which will be array of object with keys in snake_case containing all the details.
 """
 
     try:
