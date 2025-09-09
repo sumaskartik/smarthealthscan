@@ -1,10 +1,26 @@
 # main.py
 import shutil, tempfile, os
 from fastapi import FastAPI, File, UploadFile
-from rag import process_document_and_extract
+from rag import extract_from_image_with_llm
 from db import master_collection
 
+
 app = FastAPI(debug=True)
+
+
+def get_document_schema(doc_type: str):
+    """
+    Retrieves the UI schema for a given document type from the database.
+    """
+    try:
+        schema_doc = master_collection.find_one(
+            {"doc_type": doc_type}, {"_id": 0, "fields": 1}
+        )
+        if schema_doc and "fields" in schema_doc:
+            return schema_doc["fields"]
+        return None
+    except Exception as e:
+        return None
 
 
 @app.get("/")
@@ -15,15 +31,18 @@ async def root():
 
 
 @app.post("/extract-and-validate")
-async def add_document(file: UploadFile = File(...)):
-    # preserve file extension (pdf, docx, png, etc.)
+async def add_document(file: UploadFile = File(...), doc_type: str = "KYC_document"):
     ext = os.path.splitext(file.filename)[1] or ".bin"
+
+    # Save uploaded file to a temporary location
     with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as tmp:
         shutil.copyfileobj(file.file, tmp)
         tmp_path = tmp.name
 
-    # Add document to vector store
-    result = process_document_and_extract(tmp_path)
+    schema_fields = get_document_schema(doc_type)
+
+    result = extract_from_image_with_llm(tmp_path, schema_fields)
+
     return {"message": result}
 
 
