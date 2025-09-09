@@ -7,7 +7,15 @@ from db import master_collection
 
 app = FastAPI(debug=True)
 
-ALLOWED_DOC_TYPES = {"lab_report", "kyc_document", "diagnostic_report", "ipatient_bill"}
+ALLOWED_DOC_TYPES = {
+    "lab_report",
+    "kyc_document",
+    "diagnostic_report",
+    "ipatient_bill",
+    "discharge_summary",
+    "insurance_document",
+    "patient_admission",
+}
 
 
 def get_document_schema(doc_type: str):
