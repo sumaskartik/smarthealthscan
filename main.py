@@ -1,7 +1,7 @@
 # main.py
 import shutil, tempfile, os
-from fastapi import FastAPI, File, UploadFile
-from rag import extract_from_image_with_llm
+from fastapi import FastAPI, File, UploadFile, Form
+from rag import extract_from_image_with_gemini
 from db import master_collection
 
 
@@ -31,7 +31,7 @@ async def root():
 
 
 @app.post("/extract-and-validate")
-async def add_document(file: UploadFile = File(...), doc_type: str = "KYC_document"):
+async def add_document(file: UploadFile = File(...), doc_type: str = Form(...)):
     ext = os.path.splitext(file.filename)[1] or ".bin"
 
     # Save uploaded file to a temporary location
@@ -41,7 +41,7 @@ async def add_document(file: UploadFile = File(...), doc_type: str = "KYC_docume
 
     schema_fields = get_document_schema(doc_type)
 
-    result = extract_from_image_with_llm(tmp_path, schema_fields)
+    result = extract_from_image_with_gemini(tmp_path, schema_fields)
 
     return {"message": result}
 
