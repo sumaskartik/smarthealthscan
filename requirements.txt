@@ -9,16 +9,10 @@ pypdf
 sse_starlette
 python-multipart
 streamlit
-requests
-pinecone
 langchain_community
 langchain_pinecone
-langchain-huggingface
-sentence-transformers>=2.2.2
-deskew
 pymongo
-# FAISS for vector store
-faiss-cpu>=1.7.4
+langchain_google_genai
 
 # PDF handling
 PyMuPDF>=1.22.5       # also called 'fitz'
@@ -27,15 +21,8 @@ pdfminer.six>=20221105
 # DOCX handling
 python-docx>=0.8.11
 
-# Image handling and OCR
-Pillow>=10.0.0
-pytesseract>=0.3.10
 
-# Optional: if using HuggingFace transformers directly
-transformers>=4.40.0
-torch>=2.1.0
 
-# Utilities
-tqdm>=4.65.0
+
 
 e
