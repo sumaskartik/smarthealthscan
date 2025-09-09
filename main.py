@@ -1,11 +1,13 @@
 # main.py
 import shutil, tempfile, os
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from rag import extract_from_image_with_gemini
 from db import master_collection
 
 
 app = FastAPI(debug=True)
+
+ALLOWED_DOC_TYPES = {"lab_report", "kyc_document", "diagnostic_report", "ipatient_bill"}
 
 
 def get_document_schema(doc_type: str):
@@ -32,6 +34,13 @@ async def root():
 
 @app.post("/extract-and-validate")
 async def add_document(file: UploadFile = File(...), doc_type: str = Form(...)):
+
+    if doc_type not in ALLOWED_DOC_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid doc_type '{doc_type}'. Must be one of {list(ALLOWED_DOC_TYPES)}",
+        )
+
     ext = os.path.splitext(file.filename)[1] or ".bin"
 
     # Save uploaded file to a temporary location
