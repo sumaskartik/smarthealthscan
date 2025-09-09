@@ -2,16 +2,10 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.py",
+      "src": "main.py",
       "use": "@vercel/python",
       "config": {
-        "includeFiles": [
-          "api/*.py",
-          "rag.py",
-          "db.py",
-          "main.py",
-          "requirements.txt"
-        ]
+        "maxLambdaSize": "15mb"
       }
     }
   ],
